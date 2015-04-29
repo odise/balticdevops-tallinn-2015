@@ -1,0 +1,36 @@
+Minimize Container Size And Simplify Deployments.
+Baltic DevOps, Tallin 2015
+
+Jan Nabbefeld
+kreuzwerker
+jan.nabbefeld@kreuzwerker.de
+http://odise.github.io
+@esido
+
+* What is a container
+
+- processes isolation on top of cgroups and namespaces 
+
+- does not include a separate operating system
+
+- different Docker base image flavors like _debian_, _ubuntu_ or _centos_
+
+* container foundation
+
+  $ debootstrap --verbose wheezy targetdir
+  ...
+  
+  $ ls -al targetdir
+  drwxr-xr-x  2 root root 4096 Dec 11  2012 bin
+  drwxr-xr-x  2 root root 4096 Dec 24 13:41 boot
+  ...
+  drwxr-xr-x  9 root root 4096 Jun 22  2012 usr
+  drwxr-xr-x 11 root root 4096 Dec 11  2012 var
+
+  $ cd targetdir
+  $ sudo tar --numeric-owner -c . | docker import - debian:latest
+  ce8f9fc3eba3239816f19dfb5c10d5524102b908519f2b5126a8e517afbd6b95
+
+  ~/targetdir$ docker images
+  REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+  debian              latest              ce8f9fc3eba3        7 seconds ago       218.6 MB
