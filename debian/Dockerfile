@@ -1,7 +1,11 @@
-#FROM debian:wheezy
-FROM odise/busybox-java
+FROM java:7-jdk
 
-ADD JDBCExample.class /
-ADD mysql-connector-java-5.1.35-bin.jar /
+RUN apt-get update && apt-get install -y make
+ADD *.java /
+ADD Makefile /
 
-CMD ["java", "-cp", ".:mysql-connector-java-5.1.35-bin.jar","JDBCExample"]
+RUN make build run
+
+EXPOSE 8089
+
+CMD ["java", "-jar", "/jar/Example.jar"]

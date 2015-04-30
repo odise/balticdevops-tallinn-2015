@@ -1,14 +1,13 @@
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import java.io.IOException;
 
-public class JDBCExample  extends NanoHTTPD  { 
+public class Example  extends NanoHTTPD  { 
 
   public static String success = null;
 
-  public JDBCExample() {
+  public Example() {
     super(8089);
   }
 
@@ -41,7 +40,7 @@ public class JDBCExample  extends NanoHTTPD  {
 
     System.out.println(success);
 
-    JDBCExample server = new JDBCExample();
+    Example server = new Example();
     try {
       server.start();
     } catch (IOException ioe) {
@@ -49,13 +48,9 @@ public class JDBCExample  extends NanoHTTPD  {
         System.exit(-1);
     }
 
-    try {
-      System.in.read();
-    } catch (Throwable ignored) {
-    }
+    System.out.println("Type [CTRL]+[C] to quit!");
 
-    server.stop();
-    System.out.println("Server stopped.\n");
+    Thread.sleep(Long.MAX_VALUE);
   }
 
   @Override public Response serve(IHTTPSession session) {
