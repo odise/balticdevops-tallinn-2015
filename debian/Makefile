@@ -17,3 +17,10 @@ build: mysql-connector-java-5.1.35
 
 run:
 	java -jar jar/Example.jar
+
+dockerjdk:
+	docker build -t example:jdk .
+
+dockerjre: build
+	cp Dockerfile.jre jar/Dockerfile
+	docker build -t example:alpine jar
