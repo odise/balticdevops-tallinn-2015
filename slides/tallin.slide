@@ -15,8 +15,9 @@ http://odise.github.io
 
 - different Docker base image flavors like _debian_, _ubuntu_ or _centos_
 
-* container foundation
+* Container foundation
 
+- create a file system 
   $ debootstrap --verbose wheezy targetdir
   ...
   
@@ -27,6 +28,8 @@ http://odise.github.io
   drwxr-xr-x  9 root root 4096 Jun 22  2012 usr
   drwxr-xr-x 11 root root 4096 Dec 11  2012 var
 
+- package it and create a Docker container
+
   $ cd targetdir
   $ sudo tar --numeric-owner -c . | docker import - debian:latest
   ce8f9fc3eba3239816f19dfb5c10d5524102b908519f2b5126a8e517afbd6b95
@@ -34,3 +37,29 @@ http://odise.github.io
   ~/targetdir$ docker images
   REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
   debian              latest              ce8f9fc3eba3        7 seconds ago       218.6 MB
+
+* OS base images creation
+
+- Debian/Ubuntu: debootstrap
+- Centos: yum
+- archlinux: pacstrap
+- Alpine Linux: apk.static
+- BusyBox: copy files or Buildroot
+
+* Base image sizes
+
+Some base image sizes:
+
+- _archlinux_  *282.8MB*
+- _centos:7_  *215.7MB*
+- _ubuntu-debootstrap:15.04_  *110.1MB*
+- _debian:wheezy_  *84.96MB*
+- _busybox-curl_  *7.071MB*
+- _alpine:3.1_  *5.025MB*
+- _scratch_:  *0MB*
+
+* OS size is not everything! How do you get your software onboard?
+
+* The Java case
+
+- 
