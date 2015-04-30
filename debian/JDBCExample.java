@@ -2,18 +2,15 @@ import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import java.io.*;
-import javax.xml.ws.*;
-import javax.xml.ws.http.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
+import java.io.IOException;
 
-
-@WebServiceProvider
-@ServiceMode(value = Service.Mode.PAYLOAD)
-public class JDBCExample implements Provider<Source> { 
+public class JDBCExample  extends NanoHTTPD  { 
 
   public static String success = null;
+
+  public JDBCExample() {
+    super(8089);
+  }
 
   public static void main(String[] argv) throws InterruptedException {
 
@@ -32,35 +29,42 @@ public class JDBCExample implements Provider<Source> {
 
     try {
       connection = DriverManager
-      .getConnection("jdbc:mysql://db:3306/test","root", "password");
+        .getConnection("jdbc:mysql://db:3306/test","root", "password");
 
     } catch (SQLException e) {
-      System.out.println("Connection Failed! Check output console");
-      e.printStackTrace();
-      //success = "Connection Failed! Check output console";
-      //return;
+      success = "Failed to make connection!";
     }
 
     if (connection != null) {
-      System.out.println("You made it, take control your database now!");
-      success = "<p>You made it, take control your database now!</p>";
-    } else {
-      System.out.println("Failed to make connection!");
-      success = "<p>Failed to make connection!</p>";
+      success = "You made it, take control your database now!";
     }
 
-    String address = "http://127.0.0.1:8080/";
-    Endpoint.create(HTTPBinding.HTTP_BINDING, new JDBCExample()).publish(address);
+    System.out.println(success);
 
-    System.out.println("Service running at " + address);
-    System.out.println("Type [CTRL]+[C] to quit!");
+    JDBCExample server = new JDBCExample();
+    try {
+      server.start();
+    } catch (IOException ioe) {
+        System.err.println("Couldn't start server:\n" + ioe);
+        System.exit(-1);
+    }
 
-    Thread.sleep(Long.MAX_VALUE);
+    try {
+      System.in.read();
+    } catch (Throwable ignored) {
+    }
 
+    server.stop();
+    System.out.println("Server stopped.\n");
   }
 
-  public Source invoke(Source request) {
-    return  new StreamSource(new StringReader(success));
-  }
-  
+  @Override public Response serve(IHTTPSession session) {
+        Method method = session.getMethod();
+        System.out.println(method + " '" + session.getUri() + "' ");
+
+        String msg = success;
+
+        return new NanoHTTPD.Response(success);
+    }
+
 }
