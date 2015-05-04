@@ -1,11 +1,11 @@
 FROM java:7-jdk
 
 RUN apt-get update && apt-get install -y make
-ADD *.java /
-ADD Makefile /
+ADD *.java /opt/
+ADD Makefile /opt/
 
-RUN make build run
+WORKDIR /opt
+
+RUN make build
 
 EXPOSE 8089
-
-CMD ["java", "-jar", "/jar/Example.jar"]

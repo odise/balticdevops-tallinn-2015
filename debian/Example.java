@@ -28,7 +28,8 @@ public class Example  extends NanoHTTPD  {
 
     try {
       connection = DriverManager
-        .getConnection("jdbc:mysql://db:3306/test","root", "password");
+        .getConnection("jdbc:" + System.getenv("EXAMPLE_DATABASE"), 
+            System.getenv("EXAMPLE_USER"), System.getenv("EXAMPLE_ROOT_PASSWORD"));
 
     } catch (SQLException e) {
       success = "Failed to make connection!";
