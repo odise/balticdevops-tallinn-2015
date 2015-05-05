@@ -88,7 +88,7 @@ NanoHTTPD.java, mysql-connector-java.jar
 
 * Build the JAR inside a container
 
-.code ../debian/Dockerfile
+.code ../example/Dockerfile
 
 The resulting image is ~ 600MB. 
 
@@ -102,7 +102,7 @@ The resulting image is ~ 600MB.
 
 Build a small image:
 
-.code ../debian/Dockerfile.jre
+.code ../example/Dockerfile.jre
 
 Size of the _example:alpine_: 123MB
 
