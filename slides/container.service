@@ -1,0 +1,18 @@
+[Unit]
+Description=Start, stop and restart the example container
+Requires=docker.service db.service
+After=docker.service db.service
+
+[Service]
+Restart=always
+
+ExecStartPre=-/usr/bin/docker rm -f %n
+ExecStop=-/usr/bin/docker kill %n
+ExecStart=/usr/bin/docker run \
+    --link db:db \
+    -p 8089:8089 \
+    --env-file=/etc/sysconfig/%n \
+    --rm --name %n example:alpine
+
+[Install]
+WantedBy=multi-user.target

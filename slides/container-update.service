@@ -1,0 +1,11 @@
+[Unit]
+Description=Update container image
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/container-update.sh
+
+[Install]
+WantedBy=multi-user.target
+

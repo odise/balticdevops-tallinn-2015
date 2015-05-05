@@ -38,14 +38,6 @@ http://odise.github.io
   REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
   debian              latest              ce8f9fc3eba3        7 seconds ago       218.6 MB
 
-* OS base images creation
-
-- Debian/Ubuntu: debootstrap
-- Centos: yum
-- archlinux: pacstrap
-- Alpine Linux: apk.static
-- BusyBox: copy files or Buildroot
-
 * Base image sizes
 
 Some base image sizes:
@@ -140,14 +132,77 @@ Let's link our container with the database container.
     -e EXAMPLE_ROOT_PASSWORD=password \
     -e EXAMPLE_USER=root \
     -e EXAMPLE_DATABASE=mysql://db:3306/test \
-    --rm --name example example:jdk \
-    java -jar /opt/jar/Example.jar
+    --rm --name example example:alpine 
   -------- MySQL JDBC Connection Testing ------------
   MySQL JDBC Driver Registered!
   You made it, take control your database now!
   Type [CTRL]+[C] to quit!
 
-* Process monitoring
+* Deployment alias Simple Orchestration
 
-* What happens if one of the containers dies?
+* Must haves
+
+- Container startup and restart (container dependencies)
+- Container update
+- Container logs
+
+* Parts
+
+Host deployment
+
+- SSH keys
+- Docker
+- tools like tmux, nmap, vi etc.
+
+Container deployment
+
+- installation
+- start and restart
+- update
+- configuration
+
+* Host deployment
+
+- image based 
+- infrastructure deployment tools like Ansible, Chef, Puppet etc.
+- cloud-init
+
+* Container deployment 
+
+- Ansible and friends can do this for you ...
+- init scripts
+
+We have two candidates: *Upstart* and *systemd*. 
+
+Why? 
+
+Because everybody can write init scripts!
+
+* Example
+
+* Splitting up
+
+- container start and stop
+- container update
+- container content configuration
+
+* Start, Stop, Restart - systemd
+
+.code container.service
+
+* Start, Stop, Restart - Upstart
+
+.code container.conf
+
+* Update
+
+.code container-update.service
+
+Fetching from a registry:
+
+  /usr/bin/docker pull example:latest
+
+or why not without having a registry:
+
+  curl https://image-store.net/example:alpine:version-1.0.1 | docker import - example:latest
 
