@@ -204,5 +204,40 @@ Fetching from a registry:
 
 or why not without having a registry:
 
-  curl https://image-store.net/example:alpine:version-1.0.1 | docker import - example:latest
+  curl --silent https://image-store.net/example:alpine:version-1.0.1 | docker import - example:latest
 
+Restart the service afterwards.
+
+* Logging - systemd
+
+systemd provides _journalctl_ and _systemd-journal-gatewayd_
+
+  systemctl start systemd-journal-gatewayd.socket 
+
+Analyze log outputs based on filter rules:
+
+  curl --silent -H'Accept: text/plain' \
+      'http://host:19531/entries?follow&_SYSTEMD_UNIT=example.service&_SYSTEMD_UNIT=docker.service'
+
+Extras:
+
+- HTTPS
+- multiple formats
+- time range queries
+- log collection from different hosts using _systemd-journal-remote_
+- syslog forwarding
+
+* Logging - Upstart
+
+Use _gliderlabs/logspout_ container to retrieve log outputs:
+
+  docker run --name logspout --rm \
+    -volume=/var/run/docker.sock:/tmp/docker.sock -p 8000:8000 gliderlabs/logspout
+
+and check the logs:
+
+  curl http://host:8000/logs
+
+Extras:
+
+- log forwarding to different services
