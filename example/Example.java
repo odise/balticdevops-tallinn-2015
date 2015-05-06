@@ -48,6 +48,7 @@ public class Example  extends NanoHTTPD  {
       Connection connection = null;
 
       try {
+        DriverManager.setLoginTimeout(2);
         connection = DriverManager
           .getConnection("jdbc:" + System.getenv("EXAMPLE_DATABASE"), 
               System.getenv("EXAMPLE_USER"), System.getenv("EXAMPLE_ROOT_PASSWORD"));

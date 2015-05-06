@@ -31,3 +31,20 @@ dockerjdk:
 dockerjre:
 	cp Dockerfile.jre build_jre/Dockerfile
 	docker build -t example:alpine build_jre
+
+runmysql:
+	docker run \
+    -e MYSQL_ROOT_PASSWORD=password \
+    -e MYSQL_USER=root \
+    -e MYSQL_DATABASE=test \
+    --rm --name db docker.io/mysql
+
+runexample:
+	docker run \
+    --link db:db \
+    -p 8089:8089 \
+    -e EXAMPLE_ROOT_PASSWORD=password \
+    -e EXAMPLE_USER=root \
+    -e EXAMPLE_DATABASE=mysql://db:3306/test \
+    --rm --name example example:alpine 
+
