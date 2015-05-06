@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.io.IOException;
 import java.util.Date;
 
-public class Example  extends NanoHTTPD  { 
+public class Example extends NanoHTTPD  { 
 
   public static String success = "Never tried."; 
 
@@ -58,7 +58,8 @@ public class Example  extends NanoHTTPD  {
       }
 
       if (connection != null) {
-        success = date.toString() + ": You made it, take control your database now!";
+        success = date.toString() + ": Connection to database " + 
+          System.getenv("EXAMPLE_DATABASE") + " established!";
       }
 
       System.out.println(success);
