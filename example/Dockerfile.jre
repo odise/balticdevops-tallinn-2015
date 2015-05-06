@@ -6,4 +6,4 @@ ADD Example.jar /opt/
 
 EXPOSE 8089
 
-CMD ["java", "-jar", "/opt/Example.jar"]
+CMD java -jar /opt/Example.jar
