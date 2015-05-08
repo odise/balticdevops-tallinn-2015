@@ -42,13 +42,19 @@ http://odise.github.io
 
 Some base image sizes:
 
-- _archlinux_  *282.8MB*
-- _centos:7_  *215.7MB*
-- _ubuntu-debootstrap:15.04_  *110.1MB*
-- _debian:wheezy_  *84.96MB*
-- _busybox-curl_  *7.071MB*
-- _alpine:3.1_  *5.025MB*
-- _scratch_:  *0MB*
+  archlinux                 282 MB
+
+  centos:7                  215 MB
+
+  ubuntu-debootstrap:15.04  110 MB
+
+  debian:wheezy             85 MB
+
+  busybox-curl              7 MB
+
+  alpine:3.1                5 MB
+
+  scratch                   0 MB
 
 * The (artificial) Java case
 
@@ -70,16 +76,17 @@ Code snippet:
   public class Example extends NanoHTTPD  { 
     public static void main(String[] argv) {
 
-      Connection connection = null;
-
-      connection = DriverManager
-        .getConnection("jdbc:" + System.getenv("EXAMPLE_DATABASE"), 
-            System.getenv("EXAMPLE_USER"), System.getenv("EXAMPLE_ROOT_PASSWORD"));
-
       Example server = new Example();
       server.start();
 
-      Thread.sleep(Long.MAX_VALUE);
+      while (true) {
+
+        Connection connection = DriverManager
+          .getConnection("jdbc:" + System.getenv("EXAMPLE_DATABASE"), 
+              System.getenv("EXAMPLE_USER"), System.getenv("EXAMPLE_ROOT_PASSWORD"));
+
+        Thread.sleep(5000);
+      }
     }
   }
 
@@ -92,7 +99,9 @@ NanoHTTPD.java, mysql-connector-java.jar
 
 The resulting image is ~ 600MB. 
 
-* Build-container to minimize the image
+* Build-container
+
+Get the artifacts from the previous container to build a minimized version.
 
   docker build -t example:jdk .
   docker run --name build_container example:jdk
@@ -100,13 +109,18 @@ The resulting image is ~ 600MB.
   docker cp build_container:/opt/jar/mysql-connector-java-5.1.35-bin.jar .
   docker rm build_container
 
-Build a small image:
+Alternatively:
+
+- mount a volume to the build-container
+- use volume containers 
+
+* Build a smaller image
 
 .code ../example/Dockerfile.jre
 
 Size of the _example:alpine_: 123MB
 
-We need a mySQL database ...
+We need a MySQL database ...
 
 * Docker Hub
 
@@ -140,12 +154,6 @@ Let's link our container with the database container.
 
 * Deployment alias Simple Orchestration
 
-* Must haves
-
-- Container startup and restart (container dependencies)
-- Container update
-- Container logs
-
 * Parts
 
 Host deployment
@@ -156,10 +164,10 @@ Host deployment
 
 Container deployment
 
-- installation
-- start and restart
-- update
-- configuration
+- container start and stop
+- container update
+- container content configuration
+- log collection
 
 * Host deployment
 
@@ -180,12 +188,6 @@ Because everybody can write init scripts!
 
 * Example
 
-* Splitting up
-
-- container start and stop
-- container update
-- container content configuration
-
 * Start, Stop, Restart - systemd
 
 .code container.service
@@ -204,7 +206,7 @@ Fetching from a registry:
 
 or why not without having a registry:
 
-  curl --silent https://image-store.net/example:alpine:version-1.0.1 | docker import - example:latest
+  curl --silent https://image-store.net/example:version-1.0.1 | docker import - example:latest
 
 Restart the service afterwards.
 
@@ -241,3 +243,5 @@ and check the logs:
 Extras:
 
 - log forwarding to different services
+
+* Demo

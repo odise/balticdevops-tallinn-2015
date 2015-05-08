@@ -7,10 +7,11 @@ After=docker.service
 Restart=always
 
 ExecStartPre=-/usr/bin/docker rm -f %n
-ExecStop=-/usr/bin/docker kill %n
 ExecStart=/usr/bin/docker run \
     --env-file=/etc/sysconfig/%n \
     --rm --name %n docker.io/mysql
+
+ExecStop=-/usr/bin/docker stop %n
 
 [Install]
 WantedBy=multi-user.target

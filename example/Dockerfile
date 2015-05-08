@@ -15,5 +15,3 @@ RUN javac NanoHTTPD.java && \
         | tar --strip=1 -xz mysql-connector-java-5.1.35/mysql-connector-java-5.1.35-bin.jar
 
 EXPOSE 8089
-
-CMD ["/bin/true"]
